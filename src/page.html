@@ -1,0 +1,847 @@
+<title>Kampua &amp; Kompia</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Home recipes from Sibu, Sarawak: Foochow noodles and breads, kopitiam plates, and Iban and Melanau dishes from the Rajang.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@500&family=Noto+Serif+SC:wght@900&display=swap">
+<style>
+/* Layout: kopitiam-tile hero band, then a filterable grid of recipe "signboard" cards; a recipe opens as a two-column sheet (ingredients rail + method). */
+:root {
+  --bg: #F2F5F1;          /* pale kopitiam wall tile */
+  --paper: #FFFFFF;
+  --ink: #1B2320;
+  --muted: #5A6762;
+  --line: #D6DED9;
+  --red: #A8243A;         /* ang chao, red wine lees */
+  --jade: #2C5D56;        /* kopitiam green / the Rajang */
+  --soy: #6E4428;         /* kampua dark soy */
+  --tile-red: #A8243A;
+  --tile-jade: #2C5D56;
+  --tile-soy: #6E4428;
+  --on-tile: #FFF8F3;
+  --tilegrid: rgba(44, 93, 86, .09);
+  --chip: #E4EBE6;
+  --focus: #A8243A;
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --f-han: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111715; --paper: #19211E; --ink: #E7EDE9; --muted: #9AA8A2; --line: #2A3531;
+    --red: #EC7A8B; --jade: #7CC0B3; --soy: #D3A47E;
+    --tile-red: #7E1C2D; --tile-jade: #1F4640; --tile-soy: #553420; --on-tile: #FFF3EC;
+    --tilegrid: rgba(124, 192, 179, .07); --chip: #23302C; --focus: #EC7A8B;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111715; --paper: #19211E; --ink: #E7EDE9; --muted: #9AA8A2; --line: #2A3531;
+  --red: #EC7A8B; --jade: #7CC0B3; --soy: #D3A47E;
+  --tile-red: #7E1C2D; --tile-jade: #1F4640; --tile-soy: #553420; --on-tile: #FFF3EC;
+  --tilegrid: rgba(124, 192, 179, .07); --chip: #23302C; --focus: #EC7A8B;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 17px; line-height: 1.55;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+.wrap {
+  max-width: 1120px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  margin-top: calc(-1 * env(safe-area-inset-top, 0px));
+  padding-top: calc(env(safe-area-inset-top, 0px) + 2.5rem);
+  padding-bottom: 2.75rem;
+  background:
+    linear-gradient(var(--tilegrid) 1px, transparent 1px) 0 0 / 28px 28px,
+    linear-gradient(90deg, var(--tilegrid) 1px, transparent 1px) 0 0 / 28px 28px,
+    var(--bg);
+  border-bottom: 4px solid var(--jade);
+}
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 2.5rem; align-items: end; }
+.eyebrow {
+  font-family: var(--f-mono); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--jade); margin: 0 0 .9rem;
+}
+.hero h1 {
+  font-family: var(--f-display); font-weight: 800; font-size: clamp(2.8rem, 8vw, 5.6rem);
+  line-height: .92; letter-spacing: -.035em; margin: 0; text-wrap: balance;
+}
+.hero h1 .amp { color: var(--red); font-weight: 600; }
+.hero h1 .han {
+  display: block; font-family: var(--f-han); font-size: .42em; letter-spacing: .18em;
+  color: var(--red); margin-top: .6rem; line-height: 1;
+}
+.lede { max-width: 36rem; color: var(--muted); font-size: 1.1rem; margin: 1.25rem 0 0; }
+.morning {
+  background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 1.1rem 1.2rem;
+}
+.morning h2 { font-family: var(--f-display); font-size: 1.05rem; margin: 0 0 .25rem; }
+.morning p { margin: 0 0 .8rem; color: var(--muted); font-size: .93rem; }
+.morning ol { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }
+.morning li a {
+  display: grid; grid-template-columns: 2.6rem 1fr auto; gap: .75rem; align-items: center;
+  text-decoration: none; padding: .35rem; border-radius: 8px;
+}
+.morning li a:hover { background: var(--chip); }
+.morning .mini {
+  width: 2.6rem; height: 2.6rem; border-radius: 6px; display: grid; place-items: center;
+  font-family: var(--f-han); color: var(--on-tile); background: var(--tile-red); font-size: 1rem;
+}
+.morning .when { font-family: var(--f-mono); font-size: .75rem; color: var(--muted); }
+.morning b { display: block; line-height: 1.2; }
+.morning small { color: var(--muted); }
+
+/* ---------- Toolbar ---------- */
+.toolbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--bg); border-bottom: 1px solid var(--line);
+  padding-block: .8rem;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 10; background: var(--bg);
+}
+.toolbar .wrap { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+.search { flex: 1 1 240px; position: relative; min-width: 0; }
+.search input {
+  width: 100%; font: inherit; font-size: 1rem; padding: .6rem .9rem .6rem 2.3rem;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink);
+}
+.search svg { position: absolute; left: .8rem; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; stroke: var(--muted); fill: none; }
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+.chip {
+  font: inherit; font-size: .9rem; border: 1px solid var(--line); background: var(--paper); color: var(--ink);
+  padding: .45rem .85rem; border-radius: 999px; cursor: pointer;
+}
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chip .dot { display: inline-block; width: .55rem; height: .55rem; border-radius: 50%; margin-right: .4rem; vertical-align: .05em; }
+
+/* ---------- Grid ---------- */
+main { padding-block: 2rem 3rem; }
+.section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+.section-head h2 { font-family: var(--f-display); font-size: 1.6rem; margin: 0; letter-spacing: -.01em; }
+.count { font-family: var(--f-mono); font-size: .8rem; color: var(--muted); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.1rem; }
+.card {
+  display: flex; flex-direction: column; text-decoration: none; background: var(--paper);
+  border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+  transition: transform .15s ease, border-color .15s ease;
+}
+.card:hover { transform: translateY(-3px); border-color: var(--muted); }
+.tile {
+  aspect-ratio: 16 / 9; max-width: 100%; display: grid; place-items: center; position: relative;
+  color: var(--on-tile); overflow: hidden;
+}
+.tile::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px) 0 0 / 22px 22px,
+    linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px) 0 0 / 22px 22px;
+}
+.tile .glyph { font-family: var(--f-han); font-size: 2.9rem; letter-spacing: .08em; line-height: 1; position: relative; z-index: 1; }
+.tile .glyph.latin { font-family: var(--f-display); font-weight: 800; font-size: 2.1rem; letter-spacing: -.02em; }
+.cat-foochow .tile, .tile.cat-foochow { background: var(--tile-red); }
+.cat-kopitiam .tile, .tile.cat-kopitiam { background: var(--tile-soy); }
+.cat-dayak .tile, .tile.cat-dayak { background: var(--tile-jade); }
+.card-body { padding: .9rem 1rem 1rem; display: flex; flex-direction: column; gap: .3rem; flex: 1; }
+.card-body h3 { font-family: var(--f-display); font-size: 1.22rem; line-height: 1.15; margin: 0; }
+.local { color: var(--muted); font-size: .9rem; }
+.meta { margin-top: auto; padding-top: .6rem; display: flex; gap: .9rem; font-family: var(--f-mono); font-size: .75rem; color: var(--muted); }
+.tag { font-family: var(--f-mono); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; }
+.cat-foochow .tag { color: var(--red); }
+.cat-kopitiam .tag { color: var(--soy); }
+.cat-dayak .tag { color: var(--jade); }
+.empty { padding: 2rem; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 10px; }
+
+/* ---------- Glossary ---------- */
+.glossary { margin-top: 3.5rem; }
+.glossary dl { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0 2rem; margin: 0; }
+.glossary div { padding: .8rem 0; border-top: 1px solid var(--line); }
+.glossary dt { font-weight: 700; }
+.glossary dt span { font-family: var(--f-han); font-weight: 900; color: var(--red); margin-left: .4rem; }
+.glossary dd { margin: .15rem 0 0; color: var(--muted); font-size: .95rem; }
+
+/* ---------- Recipe view ---------- */
+.back { display: inline-flex; gap: .4rem; align-items: center; text-decoration: none; font-family: var(--f-mono); font-size: .85rem; color: var(--muted); margin-bottom: 1.2rem; }
+.back:hover { color: var(--ink); }
+.r-head { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 2rem; align-items: stretch; }
+.r-head .tile { aspect-ratio: auto; min-height: 180px; border-radius: 10px; }
+.r-head .tile .glyph { font-size: 4rem; }
+.r-head .tile .glyph.latin { font-size: 2.6rem; }
+.r-head h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(2.1rem, 5.5vw, 3.6rem); line-height: 1; letter-spacing: -.03em; margin: .35rem 0 .4rem; text-wrap: balance; }
+.r-head .local { font-size: 1.05rem; }
+.r-intro { max-width: 40rem; margin: 1rem 0 0; }
+.facts { display: flex; flex-wrap: wrap; gap: .5rem 1.6rem; margin-top: 1.2rem; padding: 0; list-style: none; }
+.facts li { display: flex; flex-direction: column; }
+.facts .k { font-family: var(--f-mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.facts .v { font-weight: 700; }
+
+.r-body { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 2.5rem; margin-top: 2.2rem; align-items: start; }
+.ingredients { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 1.1rem 1.2rem 1.3rem; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 1rem); }
+.ingredients h2, .method h2, .notes h2 { font-family: var(--f-display); font-size: 1.3rem; margin: 0 0 .8rem; }
+.scaler { display: flex; align-items: center; gap: .6rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
+.scaler button {
+  width: 2.1rem; height: 2.1rem; border-radius: 50%; border: 1px solid var(--line); background: var(--bg);
+  color: var(--ink); font: 700 1.1rem/1 var(--f-mono); cursor: pointer;
+}
+.scaler button:disabled { opacity: .4; cursor: default; }
+.scaler output { font-weight: 700; min-width: 7.5rem; text-align: center; }
+.ing-group { font-family: var(--f-mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--red); margin: 1rem 0 .3rem; }
+.ing-group:first-child { margin-top: 0; }
+.ing-list { list-style: none; padding: 0; margin: 0; }
+.ing-list li { border-bottom: 1px dashed var(--line); }
+.ing-list label { display: grid; grid-template-columns: 1.2rem 4.6rem 1fr; gap: .5rem; padding: .45rem 0; cursor: pointer; align-items: baseline; }
+.ing-list input { accent-color: var(--jade); margin: 0; transform: translateY(2px); }
+.ing-list .qty { font-family: var(--f-mono); font-size: .88rem; font-variant-numeric: tabular-nums; color: var(--soy); }
+.ing-list input:checked ~ span { text-decoration: line-through; opacity: .5; }
+.method ol { list-style: none; counter-reset: step; padding: 0; margin: 0; display: grid; gap: 1.1rem; }
+.method li { counter-increment: step; display: grid; grid-template-columns: 2.4rem 1fr; gap: .8rem; max-width: 40rem; }
+.method li::before {
+  content: counter(step); font-family: var(--f-display); font-weight: 800; font-size: 1.05rem;
+  width: 2.2rem; height: 2.2rem; border-radius: 50%; display: grid; place-items: center;
+  border: 2px solid var(--ink);
+}
+.method li p { margin: .25rem 0 0; }
+.notes { margin-top: 2.2rem; display: grid; gap: 1rem; max-width: 40rem; }
+.note { border-left: 4px solid var(--jade); padding: .2rem 0 .2rem 1rem; }
+.note.warn { border-left-color: var(--red); }
+.note h3 { font-family: var(--f-mono); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; margin: 0 0 .25rem; color: var(--muted); }
+.note p { margin: 0; }
+.more { margin-top: 3rem; }
+
+footer { border-top: 1px solid var(--line); padding-block: 1.6rem 2.4rem; color: var(--muted); font-size: .9rem; }
+footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+
+@media (max-width: 820px) {
+  .hero .wrap { grid-template-columns: 1fr; gap: 1.8rem; }
+  .r-head { grid-template-columns: 1fr; }
+  .r-head .tile { min-height: 140px; order: -1; }
+  .r-body { grid-template-columns: 1fr; }
+  .ingredients { position: static; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+  .card:hover { transform: none; }
+}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Sibu · Sarawak · on the Rajang</p>
+      <h1>Kampua <span class="amp">&amp;</span> Kompia<span class="han" lang="zh">诗巫家常菜</span></h1>
+      <p class="lede">Home recipes from Sibu. Foochow noodles and breads brought by the 1901 settlers, kopitiam plates you'll find all over town, and Iban and Melanau dishes from up and down the river.</p>
+    </div>
+    <aside class="morning" aria-label="A Sibu breakfast">
+      <h2>A Sibu breakfast</h2>
+      <p>The classic kopitiam order. Make all three for a weekend morning.</p>
+      <ol>
+        <li><a href="#kampua-mee"><span class="mini" lang="zh">干盘</span><span><b>Kampua mee</b><small>Shallot-oil noodles, char siu</small></span><span class="when">25 min</span></a></li>
+        <li><a href="#bian-nyuk"><span class="mini" lang="zh">扁肉</span><span><b>Bian nyuk</b><small>Pounded-pork wonton soup</small></span><span class="when">50 min</span></a></li>
+        <li><a href="#kompia"><span class="mini" lang="zh">光饼</span><span><b>Kompia</b><small>Sesame bread with a hole</small></span><span class="when">2 hr</span></a></li>
+      </ol>
+    </aside>
+  </div>
+</header>
+
+<div id="home">
+  <div class="toolbar">
+    <div class="wrap">
+      <label class="search" for="q">
+        <svg viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+        <input id="q" type="search" placeholder="Search dishes or ingredients: midin, ang chao, mee sua…" autocomplete="off">
+      </label>
+      <div class="chips" role="group" aria-label="Filter by kitchen" id="chips"></div>
+    </div>
+  </div>
+  <main class="wrap">
+    <div class="section-head">
+      <h2 id="grid-title">All recipes</h2>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+
+    <section class="glossary" id="glossary" aria-labelledby="gl-title">
+      <div class="section-head"><h2 id="gl-title">Sibu pantry words</h2><span class="count">what you'll hear at the market</span></div>
+      <dl id="gloss"></dl>
+    </section>
+  </main>
+</div>
+
+<main id="recipe" class="wrap" hidden></main>
+
+<footer>
+  <div class="wrap">
+    <span>Home-style versions. Every Sibu family makes these a little differently, so adjust to taste.</span>
+    <span>Selamat makan · 食饭咯</span>
+  </div>
+</footer>
+
+<script>
+const CATS = {
+  foochow: { label: "Foochow", tile: "var(--tile-red)" },
+  kopitiam: { label: "Kopitiam", tile: "var(--tile-soy)" },
+  dayak: { label: "Iban & Melanau", tile: "var(--tile-jade)" },
+};
+
+/* Ingredient rows: [quantity, unit, item]. ["#", "Heading"] starts a group. null quantity = to taste / as needed. */
+const RECIPES = [
+{
+  id: "kampua-mee", cat: "foochow", glyph: "干盘面", name: "Kampua Mee", local: "干盘面 · Foochow dry-tossed noodles",
+  time: "25 min", level: "Easy", yield: { n: 2, one: "bowl", many: "bowls" },
+  intro: "Sibu's signature breakfast. Springy thin noodles tossed in shallot-scented lard with a little salt and pepper, topped with red char siu. \"Kampua\" is Foochow for \"dry plate\". Ask for it plain (white) or with a spoon of dark soy (black).",
+  ing: [
+    ["#", "Shallot oil"],
+    [3, "tbsp", "lard (or chicken fat / neutral oil)"],
+    [6, "", "shallots, thinly sliced"],
+    ["#", "Noodles"],
+    [200, "g", "fresh kampua noodles (thin wheat noodles)"],
+    [0.5, "tsp", "salt"],
+    [0.25, "tsp", "white pepper"],
+    [0.25, "tsp", "MSG (optional, but traditional)"],
+    [1, "tsp", "dark soy sauce, for the black version"],
+    [100, "g", "char siu, thinly sliced"],
+    [1, "stalk", "spring onion, chopped"],
+    [null, "", "pickled green chillies or chilli sauce, to serve"],
+  ],
+  steps: [
+    "Warm the lard in a small pan over medium-low heat. Add the shallots and fry slowly, stirring, until evenly golden, 8 to 10 minutes. Strain; keep the oil and the crispy shallots separately.",
+    "Into each serving bowl put 1½ tbsp shallot oil, the salt, pepper and MSG. Add dark soy now if you want it black.",
+    "Bring a big pot of water to a hard boil. Loosen the noodles with your fingers and drop in one portion at a time. Cook 30 to 45 seconds, just until tender with a bite.",
+    "Lift the noodles out with a strainer, give them a quick dip in cold water, then back into the boiling water for 5 seconds. This gives the springy texture. Shake off every drop of water.",
+    "Tip the noodles into the bowl and toss hard with chopsticks until every strand is glossy. Top with char siu, crispy shallots and spring onion.",
+  ],
+  notes: [
+    ["In Sibu", "Kampua comes with a small bowl of clear soup or bian nyuk on the side. Halal stalls make it with chicken fat and chicken slices."],
+    ["Swap", "Outside Sarawak, use the thinnest fresh egg-free wheat noodle you can find, or dried thin noodles cooked a little longer."],
+  ],
+},
+{
+  id: "kompia", cat: "foochow", glyph: "光饼", name: "Kompia", local: "光饼 · Foochow sesame bread",
+  time: "2 hr", level: "Medium", yield: { n: 12, one: "bread", many: "breads" },
+  intro: "Small, chewy sesame breads with a hole in the middle. Legend says Ming general Qi Jiguang had them made so soldiers could string them on a cord. In Sibu they're baked on the inside wall of a clay drum oven, then split and stuffed with pork and onion.",
+  ing: [
+    ["#", "Dough"],
+    [300, "g", "plain flour"],
+    [1, "tsp", "instant yeast"],
+    [1, "tsp", "sugar"],
+    [0.5, "tsp", "salt"],
+    [180, "ml", "warm water"],
+    [1, "tbsp", "lard or neutral oil"],
+    [2, "tbsp", "white sesame seeds"],
+    ["#", "Pork filling (optional)"],
+    [200, "g", "minced pork"],
+    [1, "", "small onion, diced"],
+    [1, "tbsp", "light soy sauce"],
+    [1, "tsp", "oyster sauce"],
+    [0.5, "tsp", "dark soy sauce"],
+    [null, "", "white pepper"],
+  ],
+  steps: [
+    "Mix flour, yeast, sugar and salt. Add the water and lard and knead about 10 minutes into a smooth, fairly firm dough. Cover and rest until doubled, about 1 hour.",
+    "Divide into 12 pieces. Roll each into a ball, then flatten into a disc about 8 cm wide and 1 cm thick.",
+    "Brush the tops lightly with water and press into the sesame seeds. Push a chopstick through the centre of each to make the hole. Rest 20 minutes.",
+    "Heat the oven to 220°C with a pizza stone or heavy tray inside. Bake the breads on the hot surface 12 to 15 minutes until golden and crisp outside.",
+    "For the filling, stir-fry the onion until soft, add the pork and break it up, then season with both soys, oyster sauce and pepper. Cook until a little dry.",
+    "Split each warm kompia sideways and stuff with the filling, or eat plain with coffee.",
+  ],
+  notes: [
+    ["In Sibu", "Kompia sellers slap the dough onto the hot wall of a charcoal oven, which gives a blistered, smoky crust. A pizza stone at full heat gets you close."],
+    ["Keep", "They harden as they cool. Re-crisp in a hot oven or toaster for 3 minutes."],
+  ],
+},
+{
+  id: "bian-nyuk", cat: "foochow", glyph: "扁肉", name: "Bian Nyuk", local: "扁肉 · Foochow wonton soup",
+  time: "50 min", level: "Medium", yield: { n: 4, one: "bowl", many: "bowls" },
+  intro: "Foochow wontons are tiny: a dab of pork pounded to a smooth, bouncy paste in skin so thin you can read through it. Served in clear broth with shallot oil and Chinese celery, usually next to kampua.",
+  ing: [
+    ["#", "Filling"],
+    [250, "g", "lean pork (shoulder or leg)"],
+    [0.5, "tsp", "salt"],
+    [0.25, "tsp", "white pepper"],
+    [1, "tsp", "sweet potato starch or cornstarch"],
+    [2, "tbsp", "ice-cold water"],
+    [40, "", "very thin wonton wrappers"],
+    ["#", "Soup"],
+    [1.2, "L", "pork or chicken stock"],
+    [1, "tbsp", "shallot oil (see Kampua Mee)"],
+    [1, "stalk", "Chinese celery, chopped"],
+    [1, "stalk", "spring onion, chopped"],
+    [null, "", "fried shallots, salt and white pepper"],
+  ],
+  steps: [
+    "Slice the pork, then pound it with the back of a cleaver or a meat mallet for about 10 minutes, folding it over as you go, until it is a smooth, sticky paste. A food processor works: pulse until very smooth.",
+    "Add salt, pepper and starch. Stir in one direction, adding the cold water a little at a time, until the paste turns springy and pulls away from the bowl.",
+    "Put about ½ tsp of filling at one corner of a wrapper and squeeze the wrapper closed around it in one quick pinch. The loose skin should flutter like a tail.",
+    "Bring the stock to a simmer and season. Divide the shallot oil, celery and spring onion between bowls.",
+    "Boil the wontons in a separate pot of water. When they float, give them 1 more minute, then lift into the bowls and ladle the hot stock over. Finish with fried shallots and pepper.",
+  ],
+  notes: [
+    ["Why pound", "Pounding instead of mincing gives the paste its smooth, slightly crunchy bite. It's the Foochow test of a good bian nyuk."],
+    ["Freeze", "Freeze uncooked wontons on a tray, then bag them. Cook straight from frozen, 1 minute longer."],
+  ],
+},
+{
+  id: "dian-bian-hu", cat: "foochow", glyph: "鼎边糊", name: "Dian Bian Hu", local: "鼎边糊 · Wok-edge rice sheet soup",
+  time: "1 hr", level: "Medium", yield: { n: 4, one: "bowl", many: "bowls" },
+  intro: "Rice batter is poured around the hot rim of a wok above boiling soup. It sets into thin sheets that get scraped into the broth. A Foochow breakfast with clams, prawns and mushrooms that is fun to make in front of people.",
+  ing: [
+    ["#", "Rice batter"],
+    [200, "g", "rice flour"],
+    [400, "ml", "water"],
+    [0.5, "tsp", "salt"],
+    ["#", "Soup"],
+    [1.5, "L", "pork stock"],
+    [150, "g", "pork belly, thinly sliced"],
+    [6, "", "dried shiitake, soaked and sliced"],
+    [2, "tbsp", "dried shrimp, soaked"],
+    [0.25, "", "head of cabbage, shredded"],
+    [150, "g", "small prawns, peeled"],
+    [8, "", "fish balls or fish cake slices"],
+    [1, "tbsp", "fish sauce"],
+    [null, "", "salt and white pepper"],
+    [1, "stalk", "Chinese celery, chopped"],
+    [null, "", "fried shallots"],
+  ],
+  steps: [
+    "Whisk the rice flour, water and salt into a thin, smooth batter. Let it rest while you make the soup.",
+    "In a wide wok, fry the pork belly until it renders a little fat. Add mushrooms and dried shrimp and fry until fragrant. Pour in the stock, add cabbage and simmer 15 minutes.",
+    "The wok should be about one-third full so the sides above the soup are very hot. Bring the soup to a rolling boil.",
+    "Stir the batter, then pour a ladleful in a ring around the wok about 5 cm above the soup line. Cover for 1 to 2 minutes until the batter is set and dry at the edges.",
+    "Scrape the sheets down into the soup with a spatula. Repeat until the batter is used up.",
+    "Add the prawns and fish balls and simmer 3 minutes. Season with fish sauce, salt and pepper. Serve topped with celery and fried shallots.",
+  ],
+  notes: [
+    ["If it slides", "The batter is too thin or the wok isn't hot enough. Wait for a hard boil and add a spoon more rice flour."],
+    ["Add clams", "Many Foochow cooks add a handful of clams with the prawns for a sweeter broth."],
+  ],
+},
+{
+  id: "red-wine-chicken-mee-sua", cat: "foochow", glyph: "红酒鸡", name: "Red Wine Chicken Mee Sua", local: "红酒鸡面线 · Foochow longevity noodles",
+  time: "50 min", level: "Easy", yield: { n: 4, one: "bowl", many: "bowls" },
+  intro: "The dish every Foochow family makes for birthdays and new mothers. Chicken simmered with ginger, sesame oil and ang chao, the red lees from homemade rice wine, poured over fine mee sua with a boiled egg.",
+  ing: [
+    [1, "kg", "chicken pieces, bone in"],
+    [70, "g", "old ginger, julienned"],
+    [3, "tbsp", "sesame oil"],
+    [3, "tbsp", "ang chao (red wine lees)"],
+    [250, "ml", "Foochow red wine"],
+    [250, "ml", "water"],
+    [1, "tsp", "sugar"],
+    [null, "", "salt"],
+    [200, "g", "mee sua (4 bundles)"],
+    [4, "", "hard-boiled eggs, peeled"],
+  ],
+  steps: [
+    "Heat the sesame oil over low heat. Fry the ginger slowly until fragrant and the edges begin to dry, about 5 minutes. Keep the heat low; sesame oil turns bitter if it smokes.",
+    "Add the ang chao and fry 1 minute until it smells winey and deepens in colour.",
+    "Add the chicken and toss to coat. Fry 5 minutes until the outside firms up.",
+    "Pour in the red wine and water. Cover and simmer 25 minutes until the chicken is tender. Season with sugar and salt; taste first, the lees are already salty.",
+    "Boil the mee sua 30 to 60 seconds, drain and rinse once to remove excess salt.",
+    "Put noodles in each bowl, add chicken and plenty of soup, and drop the egg in last.",
+  ],
+  notes: [
+    ["Long life", "The noodles are never cut. Long strands stand for long life, which is why this is birthday food."],
+    ["No homemade wine?", "Use Shaoxing wine plus 1 tsp red yeast rice (angkak) for colour. Ang chao is sold in jars at Sibu's Chinese grocers and the Central Market."],
+  ],
+},
+{
+  id: "foochow-red-wine", cat: "foochow", glyph: "红酒", name: "Homemade Foochow Red Wine", local: "福州红酒 & 红糟 · wine and ang chao",
+  time: "6 weeks", level: "Project", yield: { n: 1, one: "batch (≈1.5 L)", many: "batches" },
+  intro: "Foochow households in Sibu brew their own red glutinous rice wine. One batch gives you two things: the wine itself, and ang chao, the red lees that flavour red wine chicken, pork and fish.",
+  ing: [
+    [1, "kg", "glutinous rice"],
+    [100, "g", "red yeast rice (angkak)"],
+    [2, "", "wine yeast balls (jiu bing), crushed"],
+    [1.2, "L", "water, boiled and fully cooled"],
+  ],
+  steps: [
+    "Wash a glass or clay jar with boiling water and let it dry completely. Any water or oil left inside invites mould.",
+    "Rinse the glutinous rice, soak 4 hours, then steam 30 to 40 minutes until cooked through.",
+    "Spread the rice out and let it cool completely to room temperature. Warm rice will kill the yeast.",
+    "Mix the crushed yeast balls with the red yeast rice. Layer rice and the yeast mix in the jar, then pour in the cooled water.",
+    "Cover with a clean cloth or a loose lid. Stir once a day for the first week with a clean, dry spoon.",
+    "Leave in a cool, dark place for 30 to 40 days. Strain through muslin: the liquid is your red wine, the solids are ang chao. Keep the lees in a clean jar in the fridge.",
+  ],
+  notes: [
+    ["Safety", "Fuzzy mould (green, black or white fuzz) or a rotten smell means throw it out. A sweet-sour, boozy smell is normal. This is alcoholic.", "warn"],
+    ["Age it", "Bottle the strained wine and leave it a few months. It gets smoother and darker."],
+  ],
+},
+{
+  id: "foochow-fried-noodles", cat: "foochow", glyph: "福州炒面", name: "Foochow Fried Noodles", local: "福州炒面 · noodles in egg gravy",
+  time: "30 min", level: "Easy", yield: { n: 2, one: "plate", many: "plates" },
+  intro: "Not a dry stir-fry. The noodles are fried until smoky, then drowned in a glossy gravy of pork, prawns, squid and greens thickened with egg. Ask any Sibu kopitiam for \"Foochow char mee\".",
+  ing: [
+    [300, "g", "fresh yellow noodles"],
+    [1, "tsp", "dark soy sauce"],
+    [2, "tbsp", "oil"],
+    [3, "cloves", "garlic, minced"],
+    [100, "g", "lean pork, sliced"],
+    [100, "g", "prawns, peeled"],
+    [1, "", "small squid, sliced into rings"],
+    [6, "", "fish balls, halved"],
+    [150, "g", "choy sum, cut into lengths"],
+    [500, "ml", "chicken or pork stock"],
+    [1, "tbsp", "oyster sauce"],
+    [1, "tbsp", "light soy sauce"],
+    [0.5, "tsp", "sugar"],
+    [null, "", "white pepper"],
+    [2, "tbsp", "cornstarch mixed with 3 tbsp water"],
+    [1, "", "egg, beaten"],
+  ],
+  steps: [
+    "Heat 1 tbsp oil until smoking. Fry the noodles with the dark soy, tossing, until lightly charred in spots. Divide between plates.",
+    "Add the rest of the oil and fry the garlic until golden. Add pork, then prawns, squid and fish balls and stir-fry 1 minute.",
+    "Pour in the stock, oyster sauce, light soy, sugar and pepper. Add the choy sum and bring to a boil.",
+    "Stir the cornstarch mix and pour it in, stirring, until the gravy is thick and glossy.",
+    "Turn off the heat and drizzle in the egg in a thin stream. Wait 10 seconds, then stir gently into ribbons. Pour over the noodles.",
+  ],
+  notes: [
+    ["Serve with", "Sliced red chillies in vinegar or light soy, like every kopitiam does."],
+  ],
+},
+{
+  id: "tomato-kway-teow", cat: "kopitiam", glyph: "番茄粿条", name: "Tomato Kway Teow", local: "番茄粿条 · Sarawak tomato noodles",
+  time: "30 min", level: "Easy", yield: { n: 2, one: "plate", many: "plates" },
+  intro: "A Sarawak kopitiam favourite: charred flat rice noodles under a sweet, tangy, bright red tomato gravy with chicken, prawns and greens. Order it \"crispy\" and you get fried egg noodles instead.",
+  ing: [
+    ["#", "Noodles"],
+    [400, "g", "fresh flat rice noodles (kway teow)"],
+    [1, "tbsp", "dark soy sauce"],
+    [1, "tsp", "light soy sauce"],
+    [1, "tbsp", "oil"],
+    ["#", "Tomato gravy"],
+    [2, "tbsp", "oil"],
+    [3, "cloves", "garlic, minced"],
+    [150, "g", "chicken breast, thinly sliced"],
+    [100, "g", "prawns, peeled"],
+    [120, "ml", "tomato ketchup"],
+    [1, "tbsp", "chilli sauce"],
+    [1, "tbsp", "sugar"],
+    [1, "tsp", "oyster sauce"],
+    [400, "ml", "chicken stock or water"],
+    [1, "", "tomato, cut into wedges"],
+    [100, "g", "choy sum, cut into lengths"],
+    [2, "tbsp", "cornstarch mixed with 3 tbsp water"],
+    [1, "", "egg, beaten"],
+  ],
+  steps: [
+    "Loosen the noodles. Heat the wok until smoking, add 1 tbsp oil and the noodles, and fry with both soys over high heat until smoky with charred spots. Plate.",
+    "Heat 2 tbsp oil, fry the garlic, then add chicken and prawns and cook until just done.",
+    "Add ketchup, chilli sauce, sugar and oyster sauce and fry 30 seconds. Pour in the stock, add tomato and choy sum, and bring to a boil.",
+    "Thicken with the cornstarch mix. Turn off the heat, swirl in the egg, then stir gently into ribbons.",
+    "Pour the gravy over the noodles and serve hot.",
+  ],
+  notes: [
+    ["Balance", "It should taste sweet and tangy, not like plain ketchup. Add a squeeze of lime or a pinch more sugar until it tastes right."],
+  ],
+},
+{
+  id: "kacang-ma", cat: "kopitiam", glyph: "益母草鸡", name: "Kacang Ma Chicken", local: "益母草鸡 · motherwort chicken in rice wine",
+  time: "1 hr", level: "Easy", yield: { n: 4, one: "serving", many: "servings" },
+  intro: "A dark, herbal, gingery chicken stew cooked across Sarawak's Chinese homes, made for mothers in confinement and for anyone on a rainy day. The kacang ma herb (motherwort) is fried in sesame oil until nutty before the chicken goes in.",
+  ing: [
+    [30, "g", "dried kacang ma (motherwort), ground"],
+    [1, "kg", "chicken pieces, bone in"],
+    [80, "g", "old ginger, julienned"],
+    [4, "tbsp", "sesame oil"],
+    [250, "ml", "Foochow red wine or Chinese rice wine"],
+    [250, "ml", "water"],
+    [null, "", "salt"],
+  ],
+  steps: [
+    "If your kacang ma is whole leaves, dry-fry them in a pan over low heat until crisp and fragrant, then grind to a powder.",
+    "Heat the sesame oil over low heat and fry the ginger until golden and fragrant.",
+    "Add the kacang ma powder and fry 1 to 2 minutes, stirring constantly. It burns quickly.",
+    "Add the chicken and toss to coat in the dark paste. Fry 5 minutes.",
+    "Pour in the wine and water, cover and simmer 30 minutes until tender. Season with salt and serve with rice.",
+  ],
+  notes: [
+    ["Health", "Motherwort is traditionally avoided during pregnancy. It is eaten after birth, not before. Ask a doctor if unsure.", "warn"],
+    ["Find it", "Ground kacang ma is sold in packets at Chinese medicine shops and Sarawak grocers."],
+  ],
+},
+{
+  id: "midin-belacan", cat: "dayak", glyph: "Midin", name: "Midin Belacan", local: "Sarawak jungle fern with shrimp paste",
+  time: "15 min", level: "Easy", yield: { n: 3, one: "serving", many: "servings" },
+  intro: "Midin is a wild fern that grows across Sarawak and is found nowhere else on most menus. It stays crunchy when cooked. Bundles of it sell at every Sibu market, and this quick belacan stir-fry is how most people eat it.",
+  ing: [
+    [300, "g", "midin (young fern shoots)"],
+    [1, "tbsp", "belacan (shrimp paste), toasted"],
+    [3, "cloves", "garlic"],
+    [3, "", "shallots"],
+    [3, "", "red chillies"],
+    [1, "tbsp", "dried shrimp, soaked"],
+    [2, "tbsp", "oil"],
+    [null, "", "pinch of sugar, salt to taste"],
+  ],
+  steps: [
+    "Snap the midin where it breaks easily and keep only the tender tops and curls. Wash and drain well.",
+    "Pound or blend the belacan, garlic, shallots, chillies and dried shrimp into a rough paste.",
+    "Heat the oil and fry the paste over medium heat for 2 to 3 minutes until it darkens and smells strongly fragrant.",
+    "Turn the heat to high, add the midin and toss for 1 to 2 minutes with a splash of water. Season with sugar and salt. Serve while it is still bright green and crunchy.",
+  ],
+  notes: [
+    ["Don't overcook", "Midin goes limp and dull fast. Take it off the heat while it still snaps."],
+    ["Outside Sarawak", "Use pucuk paku (fiddlehead fern), kangkung or asparagus. Blanch fiddleheads for 2 minutes first."],
+  ],
+},
+{
+  id: "ayam-pansuh", cat: "dayak", glyph: "Pansuh", name: "Ayam Pansuh", local: "Iban chicken cooked in bamboo",
+  time: "1 hr 30", level: "Medium", yield: { n: 4, one: "serving", many: "servings" },
+  intro: "The Iban way of cooking chicken: packed into a green bamboo tube with lemongrass, ginger, torch ginger and tapioca leaves, then set over a fire. No water is added. The chicken stews in its own juice and the bamboo gives a light, sweet smokiness.",
+  ing: [
+    [1, "kg", "chicken, chopped into small pieces"],
+    [3, "stalks", "lemongrass, bruised and sliced"],
+    [40, "g", "ginger, sliced"],
+    [6, "", "shallots, sliced"],
+    [4, "cloves", "garlic, sliced"],
+    [1, "", "torch ginger bud (bunga kantan), sliced"],
+    [4, "", "bird's eye chillies, bruised (optional)"],
+    [1, "handful", "tapioca leaves (daun ubi), shredded"],
+    [1, "tsp", "salt"],
+    [2, "", "green bamboo tubes, about 50 cm (or a clay pot)"],
+  ],
+  steps: [
+    "Mix the chicken with all the aromatics, the chillies and salt. Leave 30 minutes.",
+    "Pack the chicken into the bamboo tubes, layering in the tapioca leaves. Stuff a wad of tapioca leaves into the open end as a stopper.",
+    "Prop the tubes at an angle over glowing embers. Turn every 10 minutes. Cook 45 to 60 minutes, until the outside of the bamboo is charred and juice bubbles at the top.",
+    "Pour everything out into a bowl. Serve with rice and the broth.",
+    "Without bamboo: put everything in a heavy pot with 3 tbsp water, cover tightly, and cook on the lowest flame for 45 minutes.",
+  ],
+  notes: [
+    ["In Sibu", "Tapioca leaves and torch ginger are easy to buy at Sibu Central Market, usually from Iban vendors who bring produce down the Rajang."],
+  ],
+},
+{
+  id: "umai", cat: "dayak", glyph: "Umai", name: "Umai", local: "Melanau raw fish salad",
+  time: "30 min", level: "Easy", yield: { n: 4, one: "serving", many: "servings" },
+  intro: "From the Melanau fishing communities of the Mukah coast, a few hours from Sibu. Paper-thin raw fish is cured in calamansi juice with shallots, chilli and ginger, and eaten right away with crunchy toasted sago pearls.",
+  ing: [
+    [400, "g", "very fresh white fish fillet (tenggiri or similar)"],
+    [80, "ml", "calamansi (limau kasturi) or lime juice"],
+    [1, "tsp", "salt"],
+    [6, "", "shallots, thinly sliced"],
+    [3, "", "red chillies, sliced"],
+    [3, "", "bird's eye chillies, sliced"],
+    [30, "g", "young ginger, julienned"],
+    [null, "", "toasted sago pearls (sagu), to serve"],
+  ],
+  steps: [
+    "Chill the fish well. Slice it paper-thin across the grain with a very sharp knife.",
+    "Toss with the salt and citrus juice. Leave 5 to 10 minutes until the fish turns opaque.",
+    "Squeeze out some of the juice if it's very wet. Add the shallots, chillies and ginger and toss.",
+    "Taste for salt and sourness and serve at once with a bowl of sagu.",
+  ],
+  notes: [
+    ["Safety", "Use fish you trust to eat raw. Freezing it at -20°C for 7 days first lowers parasite risk. Not advised for pregnant women or young children.", "warn"],
+    ["Sagu", "Melanau sago pearls are sold in bags at Sibu and Mukah markets. Eat them straight from the bag, like crackers."],
+  ],
+},
+{
+  id: "terung-dayak-soup", cat: "dayak", glyph: "Terung", name: "Terung Dayak Fish Soup", local: "Sour Dayak eggplant soup",
+  time: "30 min", level: "Easy", yield: { n: 4, one: "bowl", many: "bowls" },
+  intro: "Terung Dayak is a round, sour, orange-yellow eggplant grown in Sarawak gardens. Simmered with lemongrass and fish, it turns into a light, sour soup that goes with plain rice on a hot day.",
+  ing: [
+    [2, "", "terung Dayak, cut into wedges"],
+    [400, "g", "fish steaks (mackerel or catfish)"],
+    [1, "tbsp", "oil"],
+    [4, "", "shallots, sliced"],
+    [3, "cloves", "garlic, sliced"],
+    [2, "stalks", "lemongrass, bruised"],
+    [3, "", "chillies, split"],
+    [1, "L", "water"],
+    [null, "", "salt and a pinch of sugar"],
+  ],
+  steps: [
+    "Heat the oil and fry the shallots, garlic and lemongrass until fragrant.",
+    "Add the water and terung Dayak. Simmer 10 minutes until the eggplant is soft and the broth tastes sour.",
+    "Add the fish and chillies and simmer gently 5 to 8 minutes until the fish is cooked.",
+    "Season with salt and a little sugar to round off the sourness.",
+  ],
+  notes: [
+    ["Swap", "Instead of fish, use a handful of ikan bilis (dried anchovies) for a cheaper everyday version."],
+    ["Outside Sarawak", "Use 2 tomatoes and 2 tbsp tamarind juice for the sourness."],
+  ],
+},
+];
+
+const GLOSSARY = [
+  ["Kampua", "干盘", "Foochow for \"dry plate\". Sibu's dry-tossed noodles."],
+  ["Kompia", "光饼", "Foochow sesame bread with a hole, baked in a clay oven."],
+  ["Ang chao", "红糟", "Red wine lees: the fermented red rice left after making Foochow wine."],
+  ["Angkak", "红曲米", "Red yeast rice. It gives the wine and lees their colour."],
+  ["Jiu bing", "酒饼", "Wine yeast balls that start the rice fermenting."],
+  ["Mee sua", "面线", "Very fine salted wheat noodles, never cut for birthdays."],
+  ["Bian nyuk", "扁肉", "Foochow wonton with pounded-pork filling."],
+  ["Kopitiam", "咖啡店", "Coffee shop. Several hawker stalls under one roof."],
+  ["Midin", "", "Wild Sarawak fern. Crunchy, grassy, best with belacan."],
+  ["Terung Dayak", "", "Round, sour, orange eggplant grown in Sarawak."],
+  ["Bunga kantan", "", "Torch ginger flower, a pink bud with a floral, sour scent."],
+  ["Daun ubi", "", "Tapioca (cassava) leaves, used in pansuh and stir-fries."],
+  ["Sagu", "", "Toasted Melanau sago pearls, crunchy and eaten like crackers."],
+  ["Belacan", "", "Fermented shrimp paste. Toast it before using."],
+  ["Kacang ma", "益母草", "Motherwort, a bitter herb for confinement cooking."],
+];
+
+/* ---------- helpers ---------- */
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const isHan = s => /[一-鿿]/.test(s);
+const FRACS = [[0, ""], [0.25, "¼"], [1 / 3, "⅓"], [0.5, "½"], [2 / 3, "⅔"], [0.75, "¾"], [1, ""]];
+function fmtQty(q) {
+  if (q == null) return "";
+  if (q >= 20) return String(Math.round(q / 5) * 5);
+  let whole = Math.floor(q), frac = q - whole;
+  let best = FRACS.reduce((a, b) => Math.abs(b[0] - frac) < Math.abs(a[0] - frac) ? b : a);
+  if (Math.abs(best[0] - frac) > 0.06) return String(Math.round(q * 10) / 10);
+  if (best[0] === 1) { whole += 1; best = FRACS[0]; }
+  return (whole ? whole : "") + best[1] || "0";
+}
+function tile(r, cls = "") {
+  const latin = !isHan(r.glyph);
+  return `<div class="tile cat-${r.cat} ${cls}" aria-hidden="true"><span class="glyph${latin ? " latin" : ""}"${latin ? "" : ' lang="zh"'}>${esc(r.glyph)}</span></div>`;
+}
+
+/* ---------- home ---------- */
+let filter = "all", query = "";
+function renderChips() {
+  const opts = [["all", "All"], ...Object.entries(CATS).map(([k, v]) => [k, v.label])];
+  $("#chips").innerHTML = opts.map(([k, label]) => {
+    const dot = k === "all" ? "" : `<span class="dot" style="background:${CATS[k].tile}"></span>`;
+    return `<button type="button" class="chip" data-cat="${k}" aria-pressed="${k === filter}">${dot}${esc(label)}</button>`;
+  }).join("");
+}
+function haystack(r) {
+  return [r.name, r.local, r.intro, CATS[r.cat].label, ...r.ing.map(i => i[2] || i[1])].join(" ").toLowerCase();
+}
+function renderGrid() {
+  const q = query.trim().toLowerCase();
+  const list = RECIPES.filter(r => (filter === "all" || r.cat === filter) && (!q || haystack(r).includes(q)));
+  $("#grid-title").textContent = filter === "all" ? "All recipes" : CATS[filter].label;
+  $("#count").textContent = `${list.length} of ${RECIPES.length}`;
+  $("#grid").innerHTML = list.length ? list.map(r => `
+    <a class="card cat-${r.cat}" href="#${r.id}">
+      ${tile(r)}
+      <div class="card-body">
+        <span class="tag">${esc(CATS[r.cat].label)}</span>
+        <h3>${esc(r.name)}</h3>
+        <span class="local">${esc(r.local)}</span>
+        <span class="meta"><span>${esc(r.time)}</span><span>${esc(r.level)}</span></span>
+      </div>
+    </a>`).join("")
+    : `<p class="empty">Nothing matches "${esc(query)}". Try an ingredient like ginger, pork or fern.</p>`;
+}
+function renderGlossary() {
+  $("#gloss").innerHTML = GLOSSARY.map(([t, h, d]) =>
+    `<div><dt>${esc(t)}${h ? `<span lang="zh">${esc(h)}</span>` : ""}</dt><dd>${esc(d)}</dd></div>`).join("");
+}
+
+/* ---------- recipe ---------- */
+let servings = 0;
+function ingHTML(r) {
+  const f = servings / r.yield.n;
+  let html = "", open = false;
+  for (const row of r.ing) {
+    if (row[0] === "#") {
+      if (open) html += "</ul>";
+      html += `<p class="ing-group">${esc(row[1])}</p><ul class="ing-list">`;
+      open = true; continue;
+    }
+    if (!open) { html += `<ul class="ing-list">`; open = true; }
+    const [q, u, item] = row;
+    const qty = q == null ? "" : `${fmtQty(q * f)}${u ? " " + u : ""}`;
+    html += `<li><label><input type="checkbox"><span class="qty">${esc(qty)}</span><span>${esc(item)}</span></label></li>`;
+  }
+  return html + (open ? "</ul>" : "");
+}
+function yieldLabel(r) { return `${servings} ${servings === 1 ? r.yield.one : r.yield.many}`; }
+function renderRecipe(r) {
+  servings = r.yield.n;
+  const others = RECIPES.filter(x => x.cat === r.cat && x.id !== r.id).slice(0, 3);
+  $("#recipe").innerHTML = `
+    <div style="padding-block:2rem 3rem">
+      <a class="back" href="#">← All recipes</a>
+      <div class="r-head cat-${r.cat}">
+        <div>
+          <span class="tag">${esc(CATS[r.cat].label)}</span>
+          <h1>${esc(r.name)}</h1>
+          <div class="local">${esc(r.local)}</div>
+          <p class="r-intro">${esc(r.intro)}</p>
+          <ul class="facts">
+            <li><span class="k">Time</span><span class="v">${esc(r.time)}</span></li>
+            <li><span class="k">Effort</span><span class="v">${esc(r.level)}</span></li>
+            <li><span class="k">Makes</span><span class="v">${r.yield.n} ${esc(r.yield.n === 1 ? r.yield.one : r.yield.many)}</span></li>
+          </ul>
+        </div>
+        ${tile(r)}
+      </div>
+      <div class="r-body">
+        <section class="ingredients" aria-labelledby="ing-h">
+          <h2 id="ing-h">Ingredients</h2>
+          <div class="scaler">
+            <button type="button" id="less" aria-label="Fewer">−</button>
+            <output id="yield" aria-live="polite">${esc(yieldLabel(r))}</output>
+            <button type="button" id="more" aria-label="More">+</button>
+          </div>
+          <div id="ing">${ingHTML(r)}</div>
+        </section>
+        <div>
+          <section class="method" aria-labelledby="m-h">
+            <h2 id="m-h">Method</h2>
+            <ol>${r.steps.map(s => `<li><p>${esc(s)}</p></li>`).join("")}</ol>
+          </section>
+          <section class="notes" aria-label="Notes">
+            ${r.notes.map(([h, p, kind]) => `<div class="note${kind === "warn" ? " warn" : ""}"><h3>${esc(h)}</h3><p>${esc(p)}</p></div>`).join("")}
+          </section>
+        </div>
+      </div>
+      ${others.length ? `<section class="more"><div class="section-head"><h2>More ${esc(CATS[r.cat].label)} cooking</h2></div>
+        <div class="grid">${others.map(o => `<a class="card cat-${o.cat}" href="#${o.id}">${tile(o)}<div class="card-body"><span class="tag">${esc(CATS[o.cat].label)}</span><h3>${esc(o.name)}</h3><span class="local">${esc(o.local)}</span><span class="meta"><span>${esc(o.time)}</span><span>${esc(o.level)}</span></span></div></a>`).join("")}</div></section>` : ""}
+    </div>`;
+  const update = () => {
+    $("#yield").textContent = yieldLabel(r);
+    $("#ing").innerHTML = ingHTML(r);
+    $("#less").disabled = servings <= 1;
+  };
+  $("#less").onclick = () => { if (servings > 1) { servings--; update(); } };
+  $("#more").onclick = () => { servings++; update(); };
+  $("#less").disabled = servings <= 1;
+  document.title = `${r.name} · Kampua & Kompia`;
+}
+
+/* ---------- routing ---------- */
+function route() {
+  const id = location.hash.slice(1);
+  const r = RECIPES.find(x => x.id === id);
+  $("#home").hidden = !!r;
+  $("#recipe").hidden = !r;
+  $(".hero").hidden = !!r;
+  if (r) { renderRecipe(r); window.scrollTo(0, 0); }
+  else {
+    document.title = "Kampua & Kompia";
+    if (id === "glossary") $("#glossary").scrollIntoView();
+  }
+}
+
+$("#chips").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  filter = b.dataset.cat; renderChips(); renderGrid();
+});
+$("#q").addEventListener("input", e => { query = e.target.value; renderGrid(); });
+window.addEventListener("hashchange", route);
+
+renderChips(); renderGrid(); renderGlossary(); route();
+</script>
